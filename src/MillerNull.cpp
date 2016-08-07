@@ -8,7 +8,6 @@
 
 
 MTypeId MillerNull::id( 0x00121BC9 );
-
 MString MillerNull::drawDbClassification( "drawdb/geometry/MillerNull" );
 MString MillerNull::drawRegistrantId( "millerNullPlugin" );
 
@@ -32,30 +31,15 @@ MColor MillerNull::DEFAULT_COLOR = MColor(0.9, 0.3, 0.0);
 
 MillerNull::MillerNull(){}
 
-
 MillerNull::~MillerNull(){}
 
-
 void MillerNull::postConstructor() {
-    MStatus stat;
-    MFnDependencyNode fn (thisMObject(), &stat);
-    CHECK_MSTATUS(stat);
-
-    stat = fn.findPlug("useObjectColor").setShort(2);
-    CHECK_MSTATUS(stat);
-
-    stat = fn.findPlug("wireColorR").setFloat(MillerNull::DEFAULT_COLOR.r);
-    CHECK_MSTATUS(stat);
-
-    stat = fn.findPlug("wireColorG").setFloat(MillerNull::DEFAULT_COLOR.g);
-    CHECK_MSTATUS(stat);
-
-    stat = fn.findPlug("wireColorB").setFloat(MillerNull::DEFAULT_COLOR.b);
-    CHECK_MSTATUS(stat);
+    MFnDependencyNode fn (thisMObject());
+    fn.findPlug("useObjectColor").setShort(2);
+    fn.findPlug("wireColorR").setFloat(MillerNull::DEFAULT_COLOR.r);
+    fn.findPlug("wireColorG").setFloat(MillerNull::DEFAULT_COLOR.g);
+    fn.findPlug("wireColorB").setFloat(MillerNull::DEFAULT_COLOR.b);
 }
-
-
-void MillerNull::draw(M3dView & view, const MDagPath & path, M3dView::DisplayStyle style, M3dView::DisplayStatus status) { }
 
 
 void* MillerNull::creator(){
@@ -71,7 +55,6 @@ MStatus MillerNull::quickAddAttribute(MObject attr){
 
 
 MStatus MillerNull::initialize(){
-    MStatus	stat;
     MFnNumericAttribute fnNum;
     MFnEnumAttribute fnEnum;
     MFnUnitAttribute fnUnit;
@@ -141,7 +124,6 @@ MStatus MillerNull::initialize(){
     quickAddAttribute(MillerNull::size);
 
     return MS::kSuccess;
-
 }
 
 
@@ -151,7 +133,6 @@ bool MillerNull::isBounded() const {
 
 
 MBoundingBox MillerNull::boundingBox() const {
-
     MPlug sizePlug(thisMObject(), MillerNull::size);
     double size = sizePlug.asMDistance().asCentimeters();
 
@@ -185,15 +166,6 @@ MBoundingBox MillerNull::boundingBox() const {
 
 
 
-
-
-
-
-
-
-
-
-
 //-----------------------------------------------------------
 //  DRAWING OVERRIDE
 //-----------------------------------------------------------
@@ -221,7 +193,6 @@ void MillerNullOverride::updateDG() {
 
 
 void MillerNullOverride::updateDisplay() {
-
     MPlug shadedPlug(this->locatorNode, MillerNull::shaded);
     bool shaded = shadedPlug.asBool();
     if (shaded != this->icon.shaded) {
@@ -246,7 +217,6 @@ void MillerNullOverride::updateDisplay() {
 
 
 void MillerNullOverride::updateIcon() {
-
     MPlug iconPlug(this->locatorNode, MillerNull::icon);
     int iconType = iconPlug.asInt();
 
@@ -259,7 +229,6 @@ void MillerNullOverride::updateIcon() {
 
 
 void MillerNullOverride::updateSize() {
-
     MPlug sizePlug(this->locatorNode, MillerNull::size);
     float size = sizePlug.asFloat();
 
@@ -271,13 +240,11 @@ void MillerNullOverride::updateSize() {
 
 
 void MillerNullOverride::updateOpacity() {
-
     MPlug shadedOpacityPlug(this->locatorNode, MillerNull::shadedOpacity);
     float shadedOpacity = shadedOpacityPlug.asFloat();
 
     if (shadedOpacity != this->icon.shadedOpacity)
         this->icon.setShadedOpacity(shadedOpacity);
-
 
     MPlug wireframeTonePlug(this->locatorNode, MillerNull::wireframeTone);
     float wireframeTone = wireframeTonePlug.asFloat();
@@ -288,9 +255,10 @@ void MillerNullOverride::updateOpacity() {
 
 
 void MillerNullOverride::updateColor() {
+    MColor color = MHWRender::MGeometryUtilities::wireframeColor( MDagPath::getAPathTo(this->locatorNode));
 
-    MColor color = MHWRender::MGeometryUtilities::wireframeColor( MDagPath::getAPathTo(this->locatorNode) );
-    float  rgb[3] = { color.r, color.g, color.b };
+    float rgb[3];
+    color.get(rgb);
 
     if (rgb != this->icon.shadedColor)
         this->icon.setShadedColor(rgb);
@@ -298,9 +266,7 @@ void MillerNullOverride::updateColor() {
 
 
 void MillerNullOverride::updateTranslation() {
-
     MPlug translatePlug(this->locatorNode, MillerNull::posOffset);
-
     MVector posOffset{ translatePlug.child(0).asDouble(),
                        translatePlug.child(1).asDouble(),
                        translatePlug.child(2).asDouble() };
@@ -313,7 +279,6 @@ void MillerNullOverride::updateTranslation() {
 
 
 void MillerNullOverride::updateRotation() {
-
     MPlug rotatePlug(this->locatorNode, MillerNull::rotation);
     double rotOffset[3]{ rotatePlug.child(0).asDouble(),
                             rotatePlug.child(1).asDouble(),
@@ -327,7 +292,6 @@ void MillerNullOverride::updateRotation() {
 
 
 void MillerNullOverride::updateScale() {
-
     MPlug scalePlug(this->locatorNode, MillerNull::sclOffset);
     double sclOffset[3]{ scalePlug.child(0).asDouble(),
                           scalePlug.child(1).asDouble(),
@@ -353,7 +317,6 @@ MHWRender::MRenderItem *MillerNullOverride::makeRenderItem( MString name,
 
 
 void MillerNullOverride::updateRenderItems(const MDagPath& dagPath, MHWRender::MRenderItemList& renderList) {
-
     //Shaded
     MHWRender::MRenderItem *shadedRenderItem = nullptr;
 
@@ -464,7 +427,6 @@ void MillerNullOverride::populateGeometry( const MHWRender::MGeometryRequirement
 
 
 void MillerNullOverride::setupBuffers() {
-
     MHWRender::MVertexBufferDescriptor vertexDescriptor{ "", MHWRender::MGeometry::kPosition, MHWRender::MGeometry::kFloat, 3 };
     MHWRender::MVertexBufferDescriptor normalDescriptor{ "", MHWRender::MGeometry::kNormal, MHWRender::MGeometry::kFloat, 3 };
     unsigned int bufferSize;
@@ -527,7 +489,6 @@ void MillerNullOverride::setupBuffers() {
 
 
 void MillerNullOverride::destroyBuffers() {
-
     for (size_t i=0; i < MillerNullOverride::iconBuffers.size() ; ++i) {
         if (MillerNullOverride::iconBuffers[i].positions != nullptr){
             delete MillerNullOverride::iconBuffers[i].positions;

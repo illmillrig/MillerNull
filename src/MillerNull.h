@@ -20,12 +20,12 @@ public:
     virtual	~MillerNull();
     virtual void postConstructor() override;
     virtual MPxNode::SchedulingType schedulingType() const override {return MPxNode::kParallel;}
-    virtual void draw(M3dView & view, const MDagPath & path,M3dView::DisplayStyle style, M3dView::DisplayStatus status);
+    virtual void draw(M3dView & view, const MDagPath & path,M3dView::DisplayStyle style, M3dView::DisplayStatus status) override {};
     static  void* creator();
     static MStatus quickAddAttribute(MObject attr);
     static  MStatus	initialize();
-    virtual bool isBounded() const;
-    virtual MBoundingBox boundingBox() const;
+    virtual bool isBounded() const override;
+    virtual MBoundingBox boundingBox() const override;
 
 public:
     static MTypeId id;
@@ -33,7 +33,6 @@ public:
     static MString drawRegistrantId;
 
     static MObject icon;
-    static MObject shadedColor;
     static MObject shaded;
     static MObject selectShaded;
     static MObject shadedOpacity;
@@ -66,20 +65,20 @@ private:
 public:
     static MHWRender::MPxGeometryOverride *Creator(const MObject& obj) {return new MillerNullOverride(obj);}
     virtual ~MillerNullOverride();
-    virtual MHWRender::DrawAPI supportedDrawAPIs() const {return MHWRender::kAllDevices;};
-    virtual bool hasUIDrawables() const { return false; }
-    virtual bool isIndexingDirty(const MHWRender::MRenderItem &item) { return dirtyIndex; }
-    virtual bool isStreamDirty(const MHWRender::MVertexBufferDescriptor &desc) { return dirtyStream; }
-    virtual void updateRenderItems(const MDagPath &dagPath, MHWRender::MRenderItemList& renderList);
+    virtual MHWRender::DrawAPI supportedDrawAPIs() const override {return MHWRender::kAllDevices;}
+    virtual bool hasUIDrawables() const override {return false;}
+    virtual bool isIndexingDirty(const MHWRender::MRenderItem &item) override {return dirtyIndex;}
+    virtual bool isStreamDirty(const MHWRender::MVertexBufferDescriptor &desc) override {return dirtyStream;}
+    virtual void updateRenderItems(const MDagPath &dagPath, MHWRender::MRenderItemList& renderList) override;
     virtual void populateGeometry(const MHWRender::MGeometryRequirements &requirements,
                                   const MHWRender::MRenderItemList &renderItems,
-                                  MHWRender::MGeometry &data);
-    virtual void cleanUp() {};
+                                  MHWRender::MGeometry &data) override;
+    virtual void cleanUp() {} ;
     static void setupBuffers();
     static void destroyBuffers();
 
 private:
-    virtual void updateDG();
+    virtual void updateDG() override;
     virtual void updateDisplay();
     virtual void updateIcon();
     virtual void updateSize();

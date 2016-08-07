@@ -17,11 +17,11 @@ public:
 
     MStatus initShaders();
 
-    void setShadedDisplay(bool display) { this->shaded = display; }
-    void setSelectShaded(bool display) { this->selectShaded = display; }
-    void setWireframeDisplay(bool display) { this->wireframe = display; }
-    void setShadedOpacity(float opacity) { this->shadedOpacity = opacity; }
-    void setWireframeTone(float tone) { this->wireframeTone = tone; }
+    void setShadedDisplay(bool display) {this->shaded = display;}
+    void setSelectShaded(bool display) {this->selectShaded = display;}
+    void setWireframeDisplay(bool display) {this->wireframe = display;}
+    void setShadedOpacity(float opacity) {this->shadedOpacity = opacity;}
+    void setWireframeTone(float tone) {this->wireframeTone = tone;}
 
     void setIconType(int type);
     void setIconSize(double size);
@@ -37,8 +37,8 @@ public:
     static int const defaultIconType = 2;
     int iconType = 2;
 
-    MHWRender::MRenderItem::RenderItemType geoType{ MHWRender::MRenderItem::RenderItemType::DecorationItem };
-    MHWRender::MGeometry::DrawMode drawMode{ MHWRender::MGeometry::kAll };
+    MHWRender::MRenderItem::RenderItemType geoType{MHWRender::MRenderItem::RenderItemType::DecorationItem};
+    MHWRender::MGeometry::DrawMode drawMode{MHWRender::MGeometry::kAll};
 
     MHWRender::MShaderInstance *shadedShader = nullptr;
     MHWRender::MShaderInstance *wireframeShader = nullptr;
@@ -52,9 +52,9 @@ public:
     bool wireframe;
 
     double size = 1.0;
-    MVector posOffset { 0.0, 0.0, 0.0 };
-    double rotOffset[3] { 0.0, 0.0, 0.0 };
-    double sclOffset[3] { 1.0, 1.0, 1.0 };
+    MVector posOffset {0.0, 0.0, 0.0};
+    double rotOffset[3] {0.0, 0.0, 0.0};
+    double sclOffset[3] {1.0, 1.0, 1.0};
     MTransformationMatrix tfmOffset;
 
 };
