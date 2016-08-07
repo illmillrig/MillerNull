@@ -536,22 +536,18 @@ void MillerNullOverride::destroyBuffers() {
 	for (size_t i=0; i < MillerNullOverride::iconBuffers.size() ; ++i) {
 		if (MillerNullOverride::iconBuffers[i].positions != nullptr){
 			delete MillerNullOverride::iconBuffers[i].positions;
-			MillerNullOverride::iconBuffers[i].positions = nullptr;
 		}
 
 		if (MillerNullOverride::iconBuffers[i].normals != nullptr){
 			delete MillerNullOverride::iconBuffers[i].normals;
-			MillerNullOverride::iconBuffers[i].normals = nullptr;
 		}
 
 		if (MillerNullOverride::iconBuffers[i].triIndices != nullptr){
 			delete MillerNullOverride::iconBuffers[i].triIndices;
-			MillerNullOverride::iconBuffers[i].triIndices = nullptr;
 		}
 
 		if (MillerNullOverride::iconBuffers[i].edgeIndices != nullptr){
 			delete MillerNullOverride::iconBuffers[i].edgeIndices;
-			MillerNullOverride::iconBuffers[i].edgeIndices = nullptr;
 		}
 
 	}
