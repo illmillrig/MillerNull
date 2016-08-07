@@ -10,4 +10,4 @@ TODO:
 - Add Pnt snapping centers
 
 
-
+**sorry about the lack of comments.  Most of these plugins on my repo started out as just 'code sketches'. I had an idea that i was playing around with at the time and needed something to test things on. They're more learning exercies than anything else ;)
