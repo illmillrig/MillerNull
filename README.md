@@ -4,3 +4,10 @@ This was one of my first c++ maya plugins.  I'm uploading it in effort that some
 only supports vp2
 
 ![millnull](https://cloud.githubusercontent.com/assets/12991367/17464532/0539a08c-5c96-11e6-9dd7-1e1a50b93961.png)
+
+TODO:
+- Use the built in attributes on MPxLocator for things like position, and scale instead of creating new ones.  at one point, I was not subclassing MPxLocator and never changed this when I started subclassing MPxLocator.
+- Add Pnt snapping centers
+
+
+**sorry about the lack of comments.  Most of these plugins on my repo started out as just 'code sketches'. I had an idea that i was playing around with at the time and needed something to test things on. They're more learning exercies than anything else ;)
