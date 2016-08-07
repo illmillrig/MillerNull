@@ -5,4 +5,9 @@ only supports vp2
 
 ![millnull](https://cloud.githubusercontent.com/assets/12991367/17464532/0539a08c-5c96-11e6-9dd7-1e1a50b93961.png)
 
-TODO: use the built in attributes on MPxLocator for things like position, and scale instead of creating new ones.  at one point, I was not subclassing MPxLocator and never changed this when I started subclassing MPxLocator.
+TODO:
+- Use the built in attributes on MPxLocator for things like position, and scale instead of creating new ones.  at one point, I was not subclassing MPxLocator and never changed this when I started subclassing MPxLocator.
+- Add Pnt snapping centers
+
+
+
