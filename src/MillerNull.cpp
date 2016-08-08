@@ -47,14 +47,14 @@ void* MillerNull::creator(){
 }
 
 
-MStatus MillerNull::quickAddAttribute(MObject attr){
-    MStatus stat = MillerNull::addAttribute(attr);
-    CHECK_MSTATUS_AND_RETURN_IT(stat)
-    return stat;
+void MillerNull::quickAddAttribute(MObject &attr, MStatus &stat) {
+    stat = MillerNull::addAttribute(attr);
+    CHECK_MSTATUS(stat);
 }
 
 
 MStatus MillerNull::initialize(){
+    MStatus stat;
     MFnNumericAttribute fnNum;
     MFnEnumAttribute fnEnum;
     MFnUnitAttribute fnUnit;
@@ -62,73 +62,79 @@ MStatus MillerNull::initialize(){
     MillerNull::icon = fnEnum.create("icon", "icon");
 
     for (size_t i=0; i < IconShapes::icons.size(); i++)
-        fnEnum.addField(IconShapes::iconNames[i], (short)i);
+        stat = fnEnum.addField(IconShapes::iconNames[i], (short)i);
+        CHECK_MSTATUS_AND_RETURN_IT(stat);
     fnEnum.setDefault(Icon::defaultIconType);
     fnEnum.setKeyable(true);
     fnEnum.setStorable(true);
 
-    MillerNull::shaded = fnNum.create("shaded", "shaded", MFnNumericData::kBoolean, true);
+    MillerNull::shaded = fnNum.create("shaded", "shaded", MFnNumericData::kBoolean, true, &stat);
+    CHECK_MSTATUS_AND_RETURN_IT(stat);
     fnNum.setKeyable(true);
     fnNum.setStorable(true);
 
-    MillerNull::selectShaded = fnNum.create("selectShaded", "selectShaded", MFnNumericData::kBoolean, false);
+    MillerNull::selectShaded = fnNum.create("selectShaded", "selectShaded", MFnNumericData::kBoolean, false, &stat);
+    CHECK_MSTATUS_AND_RETURN_IT(stat);
     fnNum.setKeyable(true);
     fnNum.setStorable(true);
 
-    MillerNull::shadedOpacity = fnNum.create("shadedOpacity", "shadedOpacity", MFnNumericData::kFloat, 0.2);
+    MillerNull::shadedOpacity = fnNum.create("shadedOpacity", "shadedOpacity", MFnNumericData::kFloat, 0.2, &stat);
+    CHECK_MSTATUS_AND_RETURN_IT(stat);
     fnNum.setKeyable(true);
     fnNum.setStorable(true);
     fnNum.setMin(0.0);
     fnNum.setMax(1.0);
 
-    MillerNull::wireframe = fnNum.create("wireframe", "wireframe", MFnNumericData::kBoolean, true);
+    MillerNull::wireframe = fnNum.create("wireframe", "wireframe", MFnNumericData::kBoolean, true, &stat);
+    CHECK_MSTATUS_AND_RETURN_IT(stat);
     fnNum.setKeyable(true);
     fnNum.setStorable(true);
 
-    MillerNull::wireframeTone = fnNum.create("wireframeTone", "wireframeTone", MFnNumericData::kFloat, 1.0);
+    MillerNull::wireframeTone = fnNum.create("wireframeTone", "wireframeTone", MFnNumericData::kFloat, 1.0, &stat);
+    CHECK_MSTATUS_AND_RETURN_IT(stat);
     fnNum.setKeyable(true);
     fnNum.setStorable(true);
     fnNum.setMin(0.0);
     fnNum.setMax(2.0);
 
-    MillerNull::posOffset = fnNum.createPoint("translation", "translation");
+    MillerNull::posOffset = fnNum.createPoint("translation", "translation", &stat);
+    CHECK_MSTATUS_AND_RETURN_IT(stat);
     fnNum.setKeyable(true);
     fnNum.setStorable(true);
 
     MillerNull::rotationX = fnUnit.create("rotationX", "rotationX", MFnUnitAttribute::kAngle, 0.0);
     MillerNull::rotationY = fnUnit.create("rotationY", "rotationY", MFnUnitAttribute::kAngle, 0.0);
     MillerNull::rotationZ = fnUnit.create("rotationZ", "rotationZ", MFnUnitAttribute::kAngle, 0.0);
-    MillerNull::rotation = fnNum.create("rotation", "rotation", MillerNull::rotationX, MillerNull::rotationY, MillerNull::rotationZ);
+    MillerNull::rotation = fnNum.create("rotation", "rotation", MillerNull::rotationX, MillerNull::rotationY, MillerNull::rotationZ, &stat);
+    CHECK_MSTATUS_AND_RETURN_IT(stat);
     fnNum.setKeyable(true);
     fnNum.setStorable(true);
 
-    MillerNull::sclOffset = fnNum.createPoint("scale", "scale");
+    MillerNull::sclOffset = fnNum.createPoint("scale", "scale", &stat);
+    CHECK_MSTATUS_AND_RETURN_IT(stat);
     fnNum.setDefault(1.0, 1.0, 1.0);
     fnNum.setKeyable(true);
     fnNum.setStorable(true);
 
-    MillerNull::size = fnUnit.create("size", "size", MFnUnitAttribute::kDistance);
+    MillerNull::size = fnUnit.create("size", "size", MFnUnitAttribute::kDistance, &stat);
+    CHECK_MSTATUS_AND_RETURN_IT(stat);
     fnUnit.setDefault(MDistance(1.0));
     fnUnit.setKeyable(true);
     fnUnit.setStorable(true);
 
-    quickAddAttribute(MillerNull::icon);
-    quickAddAttribute(MillerNull::shaded);
-    quickAddAttribute(MillerNull::selectShaded);
-    quickAddAttribute(MillerNull::shadedOpacity);
-    quickAddAttribute(MillerNull::wireframe);
-    quickAddAttribute(MillerNull::wireframeTone);
-    quickAddAttribute(MillerNull::posOffset);
-    quickAddAttribute(MillerNull::rotation);
-    quickAddAttribute(MillerNull::sclOffset);
-    quickAddAttribute(MillerNull::size);
+    quickAddAttribute(MillerNull::icon, stat);
+    quickAddAttribute(MillerNull::shaded, stat);
+    quickAddAttribute(MillerNull::selectShaded, stat);
+    quickAddAttribute(MillerNull::shadedOpacity, stat);
+    quickAddAttribute(MillerNull::wireframe, stat);
+    quickAddAttribute(MillerNull::wireframeTone, stat);
+    quickAddAttribute(MillerNull::posOffset, stat);
+    quickAddAttribute(MillerNull::rotation, stat);
+    quickAddAttribute(MillerNull::sclOffset, stat);
+    quickAddAttribute(MillerNull::size, stat);
+    CHECK_MSTATUS_AND_RETURN_IT(stat);
 
     return MS::kSuccess;
-}
-
-
-bool MillerNull::isBounded() const {
-    return true;
 }
 
 
@@ -230,7 +236,7 @@ void MillerNullOverride::updateIcon() {
 
 void MillerNullOverride::updateSize() {
     MPlug sizePlug(this->locatorNode, MillerNull::size);
-    float size = sizePlug.asFloat();
+    double size = sizePlug.asDouble();
 
     if (size != this->icon.size) {
         this->icon.setIconSize(size);
@@ -323,9 +329,9 @@ void MillerNullOverride::updateRenderItems(const MDagPath& dagPath, MHWRender::M
     int shadedItemIndex = renderList.indexOf("iconShaded");
     if (shadedItemIndex < 0){
         shadedRenderItem = this->makeRenderItem("iconShaded",
-                                                this->icon.geoType,
+                                                MHWRender::MRenderItem::RenderItemType::NonMaterialSceneItem,
                                                 MHWRender::MGeometry::kTriangles,
-                                                this->icon.drawMode);
+                                                MHWRender::MGeometry::kAll);
         renderList.append(shadedRenderItem);
     }
     else
@@ -360,9 +366,9 @@ void MillerNullOverride::updateRenderItems(const MDagPath& dagPath, MHWRender::M
     int wireItemIndex = renderList.indexOf("iconWireframe");
     if (wireItemIndex < 0) {
         wireRenderItem = this->makeRenderItem("iconWireframe",
-                                              this->icon.geoType,
+                                              MHWRender::MRenderItem::RenderItemType::NonMaterialSceneItem,
                                               MHWRender::MGeometry::kLines,
-                                              this->icon.drawMode);
+                                              MHWRender::MGeometry::kAll);
 
         renderList.append(wireRenderItem);
     }
@@ -384,17 +390,14 @@ void MillerNullOverride::updateRenderItems(const MDagPath& dagPath, MHWRender::M
 
             this->icon.setWireframeShader();
             wireRenderItem->setShader(this->icon.wireframeShader);
-
         }
-
     }
-
 }
 
 
-void MillerNullOverride::populateGeometry( const MHWRender::MGeometryRequirements &requirements,
-                                            const MHWRender::MRenderItemList &renderItems,
-                                            MHWRender::MGeometry &data ) {
+void MillerNullOverride::populateGeometry(const MHWRender::MGeometryRequirements &requirements,
+                                          const MHWRender::MRenderItemList &renderItems,
+                                          MHWRender::MGeometry &data ) {
 
     const MHWRender::MVertexBufferDescriptorList *descriptorList = &requirements.vertexRequirements();
 
@@ -422,7 +425,6 @@ void MillerNullOverride::populateGeometry( const MHWRender::MGeometryRequirement
 
     this->dirtyStream = false;
     this->dirtyIndex = false;
-
 }
 
 
@@ -443,7 +445,6 @@ void MillerNullOverride::setupBuffers() {
             vertDataAddress[(vtx * 3) + 1] = IconShapes::icons[i].positions[vtx][1];
             vertDataAddress[(vtx * 3) + 2] = IconShapes::icons[i].positions[vtx][2];
         }
-
         MillerNullOverride::iconBuffers[i].positions->commit(vertDataAddress);
 
 
@@ -457,7 +458,6 @@ void MillerNullOverride::setupBuffers() {
             normalDataAddress[(vtx * 3) + 1] = IconShapes::icons[i].normals[vtx][1];
             normalDataAddress[(vtx * 3) + 2] = IconShapes::icons[i].normals[vtx][2];
         }
-
         MillerNullOverride::iconBuffers[i].normals->commit(normalDataAddress);
 
 
@@ -468,7 +468,6 @@ void MillerNullOverride::setupBuffers() {
 
         for (size_t j=0; j < bufferSize; j++)
             triIndicesDataAddress[j] = IconShapes::icons[i].triIndices[j];
-
         MillerNullOverride::iconBuffers[i].triIndices->commit(triIndicesDataAddress);
 
 
@@ -479,35 +478,25 @@ void MillerNullOverride::setupBuffers() {
 
         for (size_t j=0; j < bufferSize; j++)
             edgeIndicesDataAddress[j] = IconShapes::icons[i].edgeIndices[j];
-
         MillerNullOverride::iconBuffers[i].edgeIndices->commit(edgeIndicesDataAddress);
-
     }
-
-
 }
 
 
 void MillerNullOverride::destroyBuffers() {
     for (size_t i=0; i < MillerNullOverride::iconBuffers.size() ; ++i) {
-        if (MillerNullOverride::iconBuffers[i].positions != nullptr){
+        if (MillerNullOverride::iconBuffers[i].positions != nullptr)
             delete MillerNullOverride::iconBuffers[i].positions;
-        }
 
-        if (MillerNullOverride::iconBuffers[i].normals != nullptr){
+        if (MillerNullOverride::iconBuffers[i].normals != nullptr)
             delete MillerNullOverride::iconBuffers[i].normals;
-        }
 
-        if (MillerNullOverride::iconBuffers[i].triIndices != nullptr){
+        if (MillerNullOverride::iconBuffers[i].triIndices != nullptr)
             delete MillerNullOverride::iconBuffers[i].triIndices;
-        }
 
-        if (MillerNullOverride::iconBuffers[i].edgeIndices != nullptr){
+        if (MillerNullOverride::iconBuffers[i].edgeIndices != nullptr)
             delete MillerNullOverride::iconBuffers[i].edgeIndices;
-        }
-
     }
-
 }
 
 

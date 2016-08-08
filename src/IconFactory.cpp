@@ -3,6 +3,7 @@
 
 
 
+
 Icon::Icon() {
     this->initShaders();
     this->shaded = false;
@@ -13,22 +14,20 @@ Icon::Icon() {
 Icon::~Icon() {}
 
 
-MStatus Icon::initShaders() {
+void Icon::initShaders() {
     MHWRender::MRenderer *renderer = MHWRender::MRenderer::theRenderer();
     if (!renderer)
-        return MStatus::kFailure;
+        return;
 
     const MHWRender::MShaderManager *shaderMgr = renderer->getShaderManager();
     if (!shaderMgr)
-        return MStatus::kFailure;
+        return;
 
     if (this->shadedShader == nullptr)
         this->shadedShader = shaderMgr->getStockShader(MHWRender::MShaderManager::k3dSolidShader);
 
     if (this->wireframeShader == nullptr)
-        this->wireframeShader = shaderMgr->getStockShader(MHWRender::MShaderManager::k3dSolidShader);
-
-    return MStatus::kSuccess;
+        this->wireframeShader = this->shadedShader->clone();
 }
 
 
@@ -39,12 +38,12 @@ void Icon::offsetMatrix() {
 }
 
 
-void Icon::setIconType(int type) {
+void Icon::setIconType(int &type) {
     this->iconType = type;
 }
 
 
-void Icon::setIconSize(double size) {
+void Icon::setIconSize(double &size) {
     this->size = size;
     this->sclOffset[0] *= size;
     this->sclOffset[1] *= size;
@@ -52,14 +51,14 @@ void Icon::setIconSize(double size) {
 }
 
 
-void Icon::setShadedColor(float color[3]) {
+void Icon::setShadedColor(float *color) {
     this->shadedColor[0] = color[0];
     this->shadedColor[1] = color[1];
     this->shadedColor[2] = color[2];
 }
 
 
-void Icon::setTranslation(MVector translation) {
+void Icon::setTranslation(MVector &translation) {
     this->posOffset = translation;
 }
 
@@ -79,23 +78,22 @@ void Icon::setScale(double scale[3]) {
 
 
 void Icon::setShadedShader() {
-    if (this->shadedOpacity == 1.0)
-        this->shadedShader->setIsTransparent(false);
-    else
-        this->shadedShader->setIsTransparent(true);
+    if (this->shadedShader == nullptr)
+        this->initShaders();
 
-    float color[4]{ this->shadedColor[0], this->shadedColor[1], this->shadedColor[2], this->shadedOpacity };
+    this->shadedShader->setIsTransparent(this->shadedOpacity != 1.0);
+    float color[4] {this->shadedColor[0], this->shadedColor[1], this->shadedColor[2], this->shadedOpacity};
     this->shadedShader->setParameter("solidColor", color);
-
 }
 
 
 void Icon::setWireframeShader() {
-    float color[4]{ this->shadedColor[0] * this->wireframeTone,
+    if (this->wireframeShader == nullptr)
+        this->initShaders();
+
+    float color[4] {this->shadedColor[0] * this->wireframeTone,
                     this->shadedColor[1] * this->wireframeTone,
-                    this->shadedColor[2] * this->wireframeTone, 1.0f};
+                    this->shadedColor[2] * this->wireframeTone, 1.0};
 
     this->wireframeShader->setParameter("solidColor", color);
-
 }
-

@@ -48,7 +48,7 @@ MStatus initializePlugin( MObject obj ) {
 
     MGlobal::executeCommand(AE);
 
-    MStatus   status;
+    MStatus status;
     MFnPlugin plugin(obj, "Travis Miller");
 
     status = plugin.registerNode("millerNull", MillerNull::id, MillerNull::creator, MillerNull::initialize, MPxNode::kLocatorNode, &MillerNull::drawDbClassification);
@@ -71,7 +71,7 @@ MStatus initializePlugin( MObject obj ) {
 
 
 MStatus uninitializePlugin( MObject obj) {
-    MStatus   status;
+    MStatus status;
     MFnPlugin plugin( obj );
 
     status = MHWRender::MDrawRegistry::deregisterGeometryOverrideCreator(MillerNull::drawDbClassification, MillerNull::drawRegistrantId);

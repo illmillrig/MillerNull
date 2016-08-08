@@ -20,11 +20,10 @@ public:
     virtual	~MillerNull();
     virtual void postConstructor() override;
     virtual MPxNode::SchedulingType schedulingType() const override {return MPxNode::kParallel;}
-    virtual void draw(M3dView & view, const MDagPath & path,M3dView::DisplayStyle style, M3dView::DisplayStatus status) override {};
-    static  void* creator();
-    static MStatus quickAddAttribute(MObject attr);
-    static  MStatus	initialize();
-    virtual bool isBounded() const override;
+    static void* creator();
+    static void quickAddAttribute(MObject &attr, MStatus &stat);
+    static MStatus	initialize();
+    virtual bool isBounded() const override {return true;};
     virtual MBoundingBox boundingBox() const override;
 
 public:
@@ -65,6 +64,7 @@ private:
 public:
     static MHWRender::MPxGeometryOverride *Creator(const MObject& obj) {return new MillerNullOverride(obj);}
     virtual ~MillerNullOverride();
+    virtual void cleanUp() override {}
     virtual MHWRender::DrawAPI supportedDrawAPIs() const override {return MHWRender::kAllDevices;}
     virtual bool hasUIDrawables() const override {return false;}
     virtual bool isIndexingDirty(const MHWRender::MRenderItem &item) override {return dirtyIndex;}
@@ -73,7 +73,6 @@ public:
     virtual void populateGeometry(const MHWRender::MGeometryRequirements &requirements,
                                   const MHWRender::MRenderItemList &renderItems,
                                   MHWRender::MGeometry &data) override;
-    virtual void cleanUp() {} ;
     static void setupBuffers();
     static void destroyBuffers();
 
@@ -87,7 +86,6 @@ private:
     virtual void updateTranslation();
     virtual void updateRotation();
     virtual void updateScale();
-
     static MHWRender::MRenderItem* makeRenderItem(MString name, MHWRender::MRenderItem::RenderItemType geoType,
                                                                 MHWRender::MGeometry::Primitive primitive,
                                                                 MHWRender::MGeometry::DrawMode drawMode);
@@ -99,7 +97,6 @@ private:
     bool dirtyIndex;
 
     static std::array<IconBuffer, 10> iconBuffers;
-
 };
 
 //---------------------------------------------------------------------
